@@ -21,6 +21,7 @@ mongoose.connect(process.env.DATABASE, {
 
 // Routes
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 // App Middlewares
 app.use(morgan('dev'));
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV == 'development') {
 
 // Middlewares
 app.use('/api', authRoutes);
+app.use('/api', userRoutes);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
