@@ -22,6 +22,7 @@
     "mailgun.js": "^3.5.8",
     "mongoose": "^5.13.5",
     "morgan": "^1.10.0",
+    "node-fetch": "^2.6.5",
     "nodemon": "^2.0.12"
   }
 }
