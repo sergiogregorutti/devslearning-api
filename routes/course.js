@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Controllers
 const { requireSignin, adminMiddleware } = require('../controllers/auth');
-const { create, courseById, read, remove, update } = require('../controllers/course');
+const { create, courseById, read, remove, update, list, listCategories, listBySearch, photo } = require('../controllers/course');
 
 router.get('/course/:courseId', read);
 router.post('/course/create', requireSignin, adminMiddleware, create);
@@ -19,6 +19,10 @@ router.put(
     adminMiddleware,
     update
 );
+router.get("/courses", list);
+router.get("/courses/categories", listCategories);
+router.post("/courses/by/search", listBySearch);
+router.get("/course/photo/:courseId", photo);
 
 router.param('courseId', courseById);
 
