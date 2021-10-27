@@ -6,7 +6,8 @@ const categorySchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
-      max: 32
+      max: 32,
+      unique: true
     },
   },
   { timestamps: true }

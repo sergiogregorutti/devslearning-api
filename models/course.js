@@ -3,6 +3,10 @@ const { ObjectId } = mongoose.Schema;
  
 const courseSchema = new mongoose.Schema(
   {
+    photo: {
+      data: Buffer,
+      contentType: String
+    },
     name: {
       type: String,
       trim: true,
@@ -12,6 +16,14 @@ const courseSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
+      max: 2000
+    },
+    platform: {
+      type: String,
+      max: 2000
+    },
+    author: {
+      type: String,
       max: 2000
     },
     pricing: {
@@ -25,13 +37,19 @@ const courseSchema = new mongoose.Schema(
       max: 32,
       default: 0
     },
+    year: {
+      type: Number,
+      trim: true
+    },
     category: {
       type: ObjectId,
       ref: 'Category'
     },
-    photo: {
-      data: Buffer,
-      contentType: String
+    link: {
+      type: String,
+      trim: true,
+      required: true,
+      max: 2000
     },
   },
   { timestamps: true }
