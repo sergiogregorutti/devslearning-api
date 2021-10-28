@@ -1,4 +1,5 @@
 const formidable = require("formidable");
+const _ = require('lodash');
 const fs = require("fs");
 const Category = require("../models/category");
 
@@ -60,18 +61,36 @@ exports.read = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  console.log("req.body", req.body);
-  console.log("category update param", req.params.categoryId);
+  let form = new formidable.IncomingForm();
+  form.keepExtensions = true;
+  form.parse(req, (err, fields, files) => {
+      if (err) {
+          return res.status(400).json({
+              error: 'Image could not be uploaded'
+          });
+      }
 
-  const category = req.category;
-  category.name = req.body.name;
-  category.save((err, data) => {
-    if (err) {
-      return res.status(400).json({
-        error: err,
+      let category = req.category;
+      category = _.extend(category, fields);
+
+      if (files.photo) {
+          if (files.photo.size > 1000000) {
+              return res.status(400).json({
+                  error: 'Image should be less than 1mb in size'
+              });
+          }
+          category.photo.data = fs.readFileSync(files.photo.path);
+          category.photo.contentType = files.photo.type;
+      }
+
+      category.save((err, result) => {
+          if (err) {
+              return res.status(400).json({
+                  error: err
+              });
+          }
+          res.json(result);
       });
-    }
-    res.json(data);
   });
 };
 

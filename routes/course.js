@@ -8,7 +8,7 @@ const { create, courseById, read, remove, update, list, listCategories, listBySe
 router.get('/course/:courseId', read);
 router.post('/course/create', requireSignin, adminMiddleware, create);
 router.delete(
-    "/course/:courseId/",
+    "/course/:courseId",
     requireSignin,
     adminMiddleware,
     remove
