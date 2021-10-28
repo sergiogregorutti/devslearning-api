@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
  
 const categorySchema = new mongoose.Schema(
   {
+    photo: {
+      data: Buffer,
+      contentType: String
+    },
     name: {
       type: String,
       trim: true,
