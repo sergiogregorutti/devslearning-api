@@ -5,7 +5,7 @@ const Course = require('../models/course');
 
 exports.courseById = (req, res, next, id) => {
   Course.findById(id)
-      .populate('category')
+      .populate('category', ['_id', 'name'])
       .exec((err, course) => {
           if (err || !course) {
               return res.status(400).json({

@@ -57,6 +57,7 @@ exports.create = (req, res) => {
 };
 
 exports.read = (req, res) => {
+  req.category.photo = undefined;
   return res.json(req.category);
 };
 
