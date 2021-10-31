@@ -34,7 +34,7 @@ const courseSchema = new mongoose.Schema(
       type: Number,
       trim: true,
       required: true,
-      max: 32,
+      max: 9999,
       default: 0
     },
     year: {
