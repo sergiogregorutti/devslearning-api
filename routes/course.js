@@ -43,16 +43,16 @@ router.get("/courses/categories", listCategories);
 router.post("/courses/by/search", listBySearch);
 router.get("/course/photo/:courseId", photo);
 
-router.get('/es/course/:courseId', readEs);
+router.get('/es/course/:courseIdEs', readEs);
 router.post('/es/course/create', requireSignin, adminMiddleware, createEs);
 router.delete(
-    "/es/course/:courseId",
+    "/es/course/:courseIdEs",
     requireSignin,
     adminMiddleware,
     removeEs
 );
 router.put(
-    "/es/course/:courseId",
+    "/es/course/:courseIdEs",
     requireSignin,
     adminMiddleware,
     updateEs
@@ -60,7 +60,7 @@ router.put(
 router.get("/es/courses", listEs);
 router.get("/es/courses/categories", listCategoriesEs);
 router.post("/es/courses/by/search", listBySearchEs);
-router.get("/es/course/photo/:courseId", photoEs);
+router.get("/es/course/photo/:courseIdEs", photoEs);
 
 router.param('courseId', courseById);
 router.param('courseIdEs', courseByIdEs);
