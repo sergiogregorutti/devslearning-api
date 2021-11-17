@@ -4,6 +4,13 @@ const fs = require('fs');
 const Course = require('../models/course');
 const CourseEs = require('../models/courseEs');
 
+const getPagination = (page, size) => {
+  const limit = size ? +size : 3;
+  const offset = page ? page * limit : 0;
+
+  return { limit, offset };
+};
+
 exports.courseById = (req, res, next, id) => {
   Course.findById(id)
       .populate('category', ['_id', 'name'])
@@ -285,10 +292,9 @@ exports.listCategoriesEs = (req, res) => {
 };
 
 exports.listBySearch = (req, res) => {
+  const { page, size } = req.body;
   let order = req.body.order ? req.body.order : 'desc';
   let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
-  let limit = req.body.limit ? parseInt(req.body.limit) : 100;
-  let skip = parseInt(req.body.skip);
   let findArgs = {};
 
   for (let key in req.body.filters) {
@@ -306,30 +312,36 @@ exports.listBySearch = (req, res) => {
       }
   }
 
-  Course.find(findArgs)
-    .select('-photo')
-    .populate('category')
-    .sort([[sortBy, order]])
-    .skip(skip)
-    .limit(limit)
-    .exec((err, data) => {
-      if (err) {
-        return res.status(400).json({
-          error: 'Courses not found'
-        });
-      }
-      res.json({
-        size: data.length,
-        data
+  const { limit, offset } = getPagination(page, size);
+  order === "desc" ? order = "-" : order = "";
+
+  Course.paginate(findArgs, {
+    offset,
+    limit, 
+    select: '-photo',
+    populate: { path: 'category', select: '_id name' },
+    sort: `${order}${sortBy}`
+  })
+    .then((data) => {
+      res.send({
+        totalItems: data.totalDocs,
+        courses: data.docs,
+        totalPages: data.totalPages,
+        currentPage: data.page - 1,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving courses.",
       });
     });
 };
 
 exports.listBySearchEs = (req, res) => {
+  const { page, size } = req.body;
   let order = req.body.order ? req.body.order : 'desc';
   let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
-  let limit = req.body.limit ? parseInt(req.body.limit) : 100;
-  let skip = parseInt(req.body.skip);
   let findArgs = {};
 
   for (let key in req.body.filters) {
@@ -347,21 +359,28 @@ exports.listBySearchEs = (req, res) => {
       }
   }
 
-  CourseEs.find(findArgs)
-    .select('-photo')
-    .populate('category')
-    .sort([[sortBy, order]])
-    .skip(skip)
-    .limit(limit)
-    .exec((err, data) => {
-      if (err) {
-        return res.status(400).json({
-          error: 'Courses not found'
-        });
-      }
-      res.json({
-        size: data.length,
-        data
+  const { limit, offset } = getPagination(page, size);
+  order === "desc" ? order = "-" : order = "";
+
+  CourseEs.paginate(findArgs, {
+    offset,
+    limit, 
+    select: '-photo',
+    populate: { path: 'category', select: '_id name' },
+    sort: `${order}${sortBy}`
+  })
+    .then((data) => {
+      res.send({
+        totalItems: data.totalDocs,
+        courses: data.docs,
+        totalPages: data.totalPages,
+        currentPage: data.page - 1,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving courses.",
       });
     });
 };

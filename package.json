@@ -23,6 +23,7 @@
     "lodash": "^4.17.21",
     "mailgun.js": "^3.5.8",
     "mongoose": "^5.13.5",
+    "mongoose-paginate-v2": "^1.4.2",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.5",
     "nodemon": "^2.0.12"
